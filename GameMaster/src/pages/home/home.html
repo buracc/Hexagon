@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <h2 class="navtitle">Hexagon Game Master</h2>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull & release to refresh.">
+
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Players</ion-label>
+      <ion-select [(ngModel)]="player">
+        <ion-option *ngFor="let p of players">{{p.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Teams</ion-label>
+      <ion-select [(ngModel)]="team">
+        <ion-option *ngFor="let t of teams">{{t.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <button ion-button block text-center (click)="add_team(player, team)">Add player to team</button>
+  </ion-list>
+
+  <ion-item>
+    <p text-center>Winner bets</p>
+    <button ion-button block text-center *ngFor="let b of bets" (click)="bet_win(b.id, b.name)">{{b.name}}</button>
+  </ion-item>
+
+  <ion-item>
+    <p text-center>Loser bets</p>
+    <button ion-button block text-center *ngFor="let b of bets" (click)="bet_lose(b.id, b.name)">{{b.name}}</button>
+  </ion-item>
+
+  <ion-item>
+    <p text-center>Change odds</p>
+    <button ion-button block text-center *ngFor="let b of bets" (click)="odds_change(b.id, b.name, b.multiplier)">{{b.name}}</button>
+  </ion-item>
+
+
+</ion-content>

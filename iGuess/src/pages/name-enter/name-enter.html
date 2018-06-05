@@ -1,0 +1,16 @@
+<ion-content padding class="main"> 
+    <ion-card padding class="cardtop50">
+      <ion-card-content>
+        Enter nickname
+          <ion-item>
+            
+              <ion-label floating>Nickname</ion-label>
+              <ion-input type="text" [(ngModel)]="nick"></ion-input>
+            </ion-item>
+      </ion-card-content>
+    </ion-card>
+  
+    <button ion-fab text-center class="btncenter" (click)="checknick()">
+      <ion-icon name="md-arrow-round-forward"></ion-icon>
+    </button>
+  </ion-content>

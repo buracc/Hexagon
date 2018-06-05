@@ -1,0 +1,75 @@
+page-home {
+    
+    .card {
+        margin-bottom: 20%;
+    }
+    
+}
+
+.cardtop50 {
+   margin-top: 50%; 
+}
+
+.cardtop10 {
+    margin-top: 10%;
+    margin-bottom: 30%;
+}
+
+.btncenter {
+    margin: auto;
+    display: block;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.main {
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.predcat {
+    font-size: 80%;
+}
+
+.catscard {
+    display: block;
+}
+
+.eomcard {
+    display: none;
+}
+
+.roundscard {
+    display: none;
+}
+
+.rankcard {
+    display: none;
+}
+
+.profcard {
+    display: none;
+}
+
+.back_to_cats_btn {
+    display: block;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.bet_btn {
+    display: block;
+    margin: auto;
+    min-width: 20%;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.tab_btn {
+    margin: auto;
+    margin-top: 10%;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.admin_btn {
+    display: block;
+    margin: auto;
+    margin-top: 10%;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
