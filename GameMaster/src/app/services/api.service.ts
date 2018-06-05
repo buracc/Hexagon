@@ -6,6 +6,6 @@ export class ApiService {
     url: String;
 
     constructor() {
-        this.url = "http://145.28.144.51:8080/GuessAPI/";
+        this.url = "http://145.28.223.96:8080/GuessAPI/";
     }
 }
