@@ -11,18 +11,14 @@ package com.aim.guessapi.Objects;
  */
 public class User {
     private int id, pts, Team_id;
-    private String name;
+    private String name, team_name;
 
-    public User(int id, int pts, int Team_id, String name) {
+    public User(int id, int pts, int Team_id, String name, String team_name) {
         this.id = id;
         this.pts = pts;
         this.Team_id = Team_id;
         this.name = name;
-    }
-    
-    public User(String name, int pts) {
-        this.name = name;
-        this.pts = pts;
+        this.team_name = team_name;
     }
     
     public User() {
@@ -60,6 +56,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getTeam_name() {
+        return team_name;
+    }
+
+    public void setTeam_name(String team_name) {
+        this.team_name = team_name;
+    }
+    
     
     
 }

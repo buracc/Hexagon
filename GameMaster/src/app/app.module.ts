@@ -14,7 +14,7 @@ import { HttpModule } from '@angular/http';
 import { ToastService } from './services/toast.service';
 
 let config: SocketIoConfig = {
-  url: "http://145.28.144.51:3001/",
+  url: "145.28.223.96:3001",
   options: {}
 }
 

@@ -20,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -76,6 +77,14 @@ public class UserResource {
     public String newUser(String JSONmsg) throws IOException {
         User u = mapper.readValue(JSONmsg, User.class);
         return db.addNewUser(u);
+    }
+    
+    @POST
+    @Path("/team")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String setTeam(String JSONmsg) throws IOException {
+        User u = mapper.readValue(JSONmsg, User.class);
+        return db.setTeam(u);
     }
     
 }

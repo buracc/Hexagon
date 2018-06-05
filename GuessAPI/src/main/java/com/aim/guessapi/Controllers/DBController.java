@@ -50,18 +50,18 @@ public class DBController {
     }
     
     public List<User> getUserByID(int id) throws SQLException {
-        String q = "SELECT * FROM User WHERE id = '" + id + "'";
+        String q = "SELECT u.*, t.name as team_name FROM User u, Team t WHERE t.id = u.Team_id AND u.id = '" + id + "'";
         return fetchUserFromDB(q);
     }
     
     public List<User> getUserByName(String name) throws SQLException {
-        String q = "SELECT * FROM User WHERE name = '" + name + "'";
+        String q = "SELECT u.*, t.name as team_name FROM User u, Team t WHERE t.id = u.Team_id AND u.name = '" + name + "'";
         return fetchUserFromDB(q);
     }
     
     public List<User> getAllPlayersDesc() throws SQLException {
-        String q = "SELECT name, pts FROM User ORDER BY pts DESC";
-        return fetchPlayersFromDB(q);
+        String q = "SELECT u.*, t.name as team_name FROM User u, Team t WHERE t.id = u.Team_id ORDER BY u.pts DESC";
+        return fetchUserFromDB(q);
     }
     
     public List<Bet> getBetByID(int id) throws SQLException {
@@ -111,31 +111,9 @@ public class DBController {
                 String name = rs.getString("name");
                 int pts = rs.getInt("pts");
                 int Team_id = rs.getInt("Team_id");
+                String team_name = rs.getString("team_name");
                 
-                User u = new User(id, pts, Team_id, name);
-                users.add(u);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        conn.close();
-        return users;
-    }
-    
-    public List<User> fetchPlayersFromDB(String q) throws SQLException {
-        Connect();
-        List<User> users = new ArrayList();
-        
-        try {
-            pst = conn.prepareStatement(q);
-            rs = pst.executeQuery();
-            
-            while (rs.next()) {
-                String name = rs.getString("name");
-                int pts = rs.getInt("pts");
-                
-                User u = new User(name, pts);
+                User u = new User(id, pts, Team_id, name, team_name);
                 users.add(u);
             }
         } catch (SQLException e) {
@@ -307,12 +285,30 @@ public class DBController {
     
     public String addNewUser(User u) {
         Connect();
-        String q = "INSERT INTO User (name, pts) VALUES (?, ?)";
+        String q = "INSERT INTO User (name, pts, Team_id) VALUES (?, ?, 4)";
         
         try {
             pst = conn.prepareStatement(q);
             pst.setString(1, u.getName());
             pst.setInt(2, u.getPts());
+            pst.executeUpdate();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public String setTeam(User u) {
+        Connect();
+        String q = "UPDATE User u SET u.Team_id = (SELECT id from Team t where t.name = ?) WHERE u.name = ?";
+        
+        try {
+            pst = conn.prepareStatement(q);
+            pst.setString(1, u.getTeam_name());
+            pst.setString(2, u.getName());
             pst.executeUpdate();
             conn.close();
             
@@ -348,4 +344,25 @@ public class DBController {
         
         return null;
     }
+    
+    public String predictionResult(Prediction p) {
+        Connect();
+        String q = "CALL give_pts(?, ?);";
+        
+        try {
+            pst = conn.prepareStatement(q);
+            
+            pst.setInt(1, p.getBet_id());
+            pst.setInt(2, p.getId());
+            
+            pst.executeUpdate();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
 }

@@ -6,6 +6,7 @@ import { Http, RequestOptions, Headers } from '@angular/http';
 import { ApiService } from '../../app/services/api.service';
 import { ToastService } from '../../app/services/toast.service';
 import { Socket } from 'ng-socket-io';
+import { PredService } from '../../app/services/pred.service';
 
 /**
  * Generated class for the PredPage page.
@@ -28,7 +29,8 @@ interface eombet {
 
 interface player {
   name: String,
-  pts: number
+  pts: number,
+  team: String
 }
 
 interface userpred {
@@ -54,13 +56,26 @@ export class PredPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
-    public http: Http, public api: ApiService, public toastservice: ToastService, public socket: Socket) {
+    public http: Http, public api: ApiService, public predservice: PredService,
+    public toastservice: ToastService, public socket: Socket) {
 
-      socket.on("Message", data => {
-        if (data.message == "won") {
-          this.won();
-        } else if (data.message == "lost") {
-          this.lost();
+      socket.on("msg", data => {
+        console.log(this.userpreds);
+        if (data.msg == "won") {
+          for (let i in data.btrs) {
+              if (data.btrs[i].user_id == this.session.id 
+                && data.btrs[i].betid == this.userpreds) {
+                this.won();
+              }
+          }
+        } else if (data.msg == "lost") {
+          for (let i in data.btrs) {
+            if (data.btrs[i].user_id == this.session.id) {
+              this.lost();
+            }
+          }
+        } else if (data.msg == "refresh") {
+          this.updatePage();
         }
       })
 
@@ -119,6 +134,8 @@ export class PredPage {
     }, (err) => {
       this.toastservice.presenttoast("Error retrieving user info from DB. Try refreshing this page.")
     })
+
+    
     // })
   }
 
@@ -307,6 +324,7 @@ export class PredPage {
   logout() {
     this.userservice.clear_storage();
     this.navCtrl.pop();
+    this.socket.emit("disconnect");
   }
 
 }

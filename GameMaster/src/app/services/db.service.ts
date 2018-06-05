@@ -32,4 +32,10 @@ export class DbService {
         return this.http.get(this.url + 'bet/get/all')
             .map(res => res.json());
     }
+
+    getallbetters() {
+        return this.http.get(this.url + 'pred/get/all')
+            .map(res => res.json());
+    }
+
 }

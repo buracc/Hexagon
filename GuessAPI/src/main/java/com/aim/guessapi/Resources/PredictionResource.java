@@ -67,5 +67,13 @@ public class PredictionResource {
         return db.newPrediction(p);
     }
     
+    @POST
+    @Path("/result")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String predictionResult(String JSONmsg) throws IOException {
+        Prediction p = mapper.readValue(JSONmsg, Prediction.class);
+        return db.predictionResult(p);
+    }
+    
     
 }

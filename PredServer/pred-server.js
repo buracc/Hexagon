@@ -12,8 +12,8 @@ io.on('connection', function(socket) {
         io.emit("Client " + socket.id + " has disconnected.");
     });
 
-    socket.on('Message', function(data) {
-        io.emit('Message', data);
+    socket.on('msg', data => {
+        io.emit('msg', data);
     });
 });
 

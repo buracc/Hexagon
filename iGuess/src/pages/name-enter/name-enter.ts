@@ -48,6 +48,7 @@ export class NameEnterPage {
             this.gohome();
             this.toastservice.presenttoast("Welcome back " + this.userservice.nick + ".");
             this.userservice.storeUser(user);
+            
 
           } else {
             var headers = new Headers();

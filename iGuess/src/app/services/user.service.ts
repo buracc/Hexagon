@@ -52,6 +52,7 @@ export class UserService {
             name: user.name,
             pts: user.pts,
             Team_id: user.Team_id,
+            team_name: user.team_name
         });
     }
 

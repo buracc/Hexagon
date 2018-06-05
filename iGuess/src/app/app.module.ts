@@ -15,9 +15,10 @@ import { HttpModule } from '@angular/http';
 import { BetService } from './services/bet.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { PredService } from './services/pred.service';
 
 let config: SocketIoConfig = {
-  url: "http://145.28.144.51:3001/",
+  url: "145.28.223.96:3001",
   options: {}
 }
 
@@ -49,6 +50,7 @@ let config: SocketIoConfig = {
     ApiService,
     UserService,
     BetService,
+    PredService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
