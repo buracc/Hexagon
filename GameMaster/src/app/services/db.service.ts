@@ -38,4 +38,9 @@ export class DbService {
             .map(res => res.json());
     }
 
+    changeodds() {
+        return this.http.get(this.url + 'bet/change')
+            .map(res => res.json());
+    }
+
 }

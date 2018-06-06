@@ -49,5 +49,10 @@
     <button ion-button block text-center *ngFor="let b of bets" (click)="odds_change(b.id, b.name, b.multiplier)">{{b.name}}</button>
   </ion-item>
 
+  <ion-item>
+    <p text-center>Lock/unlock bets</p>
+    <button ion-button block text-center (click)="lock()">Lock bets</button>
+    <button ion-button block text-center (click)="unlock()">Unlock bets</button>
+  </ion-item>
 
 </ion-content>

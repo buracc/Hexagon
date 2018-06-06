@@ -20,6 +20,10 @@ public class Bet {
         this.name = name;
         this.multiplier = multiplier;
     }
+    
+    public Bet() {
+        
+    }
 
     public int getId() {
         return id;

@@ -365,4 +365,24 @@ public class DBController {
         return null;
     }
     
+    public String changeOdds(Bet b) {
+        Connect();
+        String q = "UPDATE Bet SET multiplier = ? WHERE id = ?;";
+        
+        try {
+            pst = conn.prepareStatement(q);
+            
+            pst.setDouble(1, b.getMultiplier());
+            pst.setInt(2, b.getId());
+            
+            pst.executeUpdate();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
 }
