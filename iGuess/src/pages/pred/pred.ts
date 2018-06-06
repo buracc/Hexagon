@@ -39,6 +39,7 @@ interface userpred {
   potential: number
 }
 
+
 @IonicPage()
 @Component({
   selector: 'page-pred',
@@ -59,30 +60,48 @@ export class PredPage {
     public http: Http, public api: ApiService, public predservice: PredService,
     public toastservice: ToastService, public socket: Socket) {
 
+    this.userservice.getUser().then(user => {
+      this.session = user;
+      this.updatePage();
+
       socket.on("msg", data => {
-        console.log(this.userpreds);
         if (data.msg == "won") {
-          for (let i in data.btrs) {
-              if (data.btrs[i].user_id == this.session.id 
-                && data.btrs[i].betid == this.userpreds) {
-                this.won();
+          this.predservice.get_per_user(this.session.id).subscribe(mypreds => {
+            if (typeof mypreds.pred[0] != 'undefined'
+          && typeof data.btrs != 'undefined') {
+              for (let i in mypreds.pred) {
+                for (let j in data.btrs) {
+                  if (mypreds.pred[i].user_id == data.btrs[j].user_id
+                    && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
+                  && mypreds.pred[i].Bet_id == data.betid) {
+                    this.won(data.betid);
+                  }
+                }
               }
-          }
-        } else if (data.msg == "lost") {
-          for (let i in data.btrs) {
-            if (data.btrs[i].user_id == this.session.id) {
-              this.lost();
             }
-          }
+          })
+
+        } else if (data.msg == "lost") {
+          this.predservice.get_per_user(this.session.id).subscribe(mypreds => {
+            if (typeof mypreds.pred[0] != 'undefined'
+          && typeof data.btrs != 'undefined') {
+              for (let i in mypreds.pred) {
+                for (let j in data.btrs) {
+                  if (mypreds.pred[i].user_id == data.btrs[j].user_id
+                    && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
+                  && mypreds.pred[i].Bet_id == data.betid) {
+                    this.lost(data.betid);
+                  }
+                }
+              }
+            }
+          })
         } else if (data.msg == "refresh") {
           this.updatePage();
         }
       })
 
-      this.userservice.getUser().then(user => {
-        this.session = user;
-        this.updatePage();
-      });
+    });
   }
 
   display_eom() {
@@ -105,12 +124,44 @@ export class PredPage {
     this.load_bets();
   }
 
-  won() {
+  won(betid) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let options = new RequestOptions({ headers: headers });
+
+    console.log(betid);
+    let postParams = {
+      "Bet_id": betid,
+      "id": 1
+    }
+
+    this.http.post(this.api.url + "pred/result", postParams, options).subscribe(data => {
+
+    }, (err) => {
+
+    })
+
     this.updatePage();
     this.toastservice.presenttoast("Your bet won!");
   }
 
-  lost() {
+  lost(betid) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let options = new RequestOptions({ headers: headers });
+
+    console.log(betid);
+    let postParams = {
+      "Bet_id": betid,
+      "id": 0
+    }
+
+    this.http.post(this.api.url + "pred/result", postParams, options).subscribe(data => {
+
+    }, (err) => {
+
+    })
+
     this.updatePage();
     this.toastservice.presenttoast("Your bet lost..");
   }
@@ -126,6 +177,11 @@ export class PredPage {
       this.userservice.getbyname(user.name).subscribe(response => {
         this.userservice.storeUser(response.user[0]);
         this.session = response.user[0];
+        this.predservice.get_per_user(this.session.id).subscribe(response => {
+          for (let i in response.pred) {
+            this.predservice.storePreds(response.pred[i]);
+          }
+        })
         // loader.dismiss();
       }, (err) => {
         this.toastservice.presenttoast("Connection error.");
@@ -135,7 +191,7 @@ export class PredPage {
       this.toastservice.presenttoast("Error retrieving user info from DB. Try refreshing this page.")
     })
 
-    
+
     // })
   }
 
@@ -305,6 +361,11 @@ export class PredPage {
     this.userservice.get_userpreds(id).subscribe(response => {
       this.userpreds = response.userpred;
     })
+
+    this.predservice.get_preds().then(mypreds => {
+
+    })
+
   }
 
   hide_all_cards() {

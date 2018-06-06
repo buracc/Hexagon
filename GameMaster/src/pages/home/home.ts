@@ -98,26 +98,11 @@ export class HomePage {
 
             loader.present().then(() => {
 
-              var headers = new Headers();
-              headers.append('Content-Type', 'application/json');
-              let options = new RequestOptions({ headers: headers });
-
-              let postParams = {
-                "Bet_id": id,
-                "id": 1
-              }
-
               this.dbservice.getallbetters().subscribe(response => {
-                this.http.post(this.api.url + "pred/result", postParams, options).subscribe(data => {
+                this.socket.emit("msg", { msg: "won", btrs: response.pred, betid: id });
 
-                  this.socket.emit("msg", {msg: "won", btrs: response.pred, betid: id});
-
-                  loader.dismiss();
-                  this.toastservice.presenttoast("Bet result sent.");
-                }, (err) => {
-                  loader.dismiss();
-                  this.toastservice.presenttoast("DB error");
-                })
+                loader.dismiss();
+                this.toastservice.presenttoast("Bet result sent.");
               })
             })
           }
@@ -149,22 +134,11 @@ export class HomePage {
 
             loader.present().then(() => {
 
-              var headers = new Headers();
-              headers.append('Content-Type', 'application/json');
-              let options = new RequestOptions({ headers: headers });
+              this.dbservice.getallbetters().subscribe(response => {
+                this.socket.emit("msg", { msg: "lost", btrs: response.pred, betid: id });
 
-              let postParams = {
-                "Bet_id": id,
-                "id": 0
-              }
-
-              this.http.post(this.api.url + "pred/result", postParams, options).subscribe(data => {
-                this.socket.emit("msg", { msg: "lost" });
                 loader.dismiss();
                 this.toastservice.presenttoast("Bet result sent.");
-              }, (err) => {
-                loader.dismiss();
-                this.toastservice.presenttoast("DB error");
               })
             })
           }

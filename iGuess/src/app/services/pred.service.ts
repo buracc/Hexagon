@@ -21,8 +21,13 @@ export class PredService {
         this.url = this.api.url + "pred/get/";
     }
 
-    getpreds() {
+    get_all() {
         return this.http.get(this.url + "all")
+        .map(res => res.json());
+    }
+
+    get_per_user(id) {
+        return this.http.get(this.url + id)
         .map(res => res.json());
     }
 
@@ -35,7 +40,7 @@ export class PredService {
         });
     }
 
-    getPreds(): Promise<any> {
+    get_preds(): Promise<any> {
         var promise = this.storage.get('pred');
         return promise;
     }
