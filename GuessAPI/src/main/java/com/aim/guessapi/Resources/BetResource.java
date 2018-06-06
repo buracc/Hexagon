@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -55,5 +56,13 @@ public class BetResource {
         JSON = new BetObj(bets);
         mapper.writerWithDefaultPrettyPrinter().writeValue(sw, JSON);
         return sw.toString();
+    }
+    
+    @POST
+    @Path("/change")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String predictionResult(String JSONmsg) throws IOException {
+        Bet b = mapper.readValue(JSONmsg, Bet.class);
+        return db.changeOdds(b);
     }
 }

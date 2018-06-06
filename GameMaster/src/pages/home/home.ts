@@ -163,18 +163,50 @@ export class HomePage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-
           }
         },
         {
           text: 'Submit',
           handler: data => {
 
+            let loader = this.loaderctrl.create({
+              content: "Loading..",
+            });
+        
+            loader.present().then(() => {
+        
+              var headers = new Headers();
+              headers.append('Content-Type', 'application/json');
+              let options = new RequestOptions({ headers: headers });
+        
+              let postParams = {
+                "id": id,
+                "multiplier": data.amount
+              }
+        
+              this.http.post(this.api.url + "bet/change", postParams, options).subscribe(data => {
+                this.socket.emit("msg", { msg: "loadbets" });
+                loader.dismiss();
+                this.update();
+                this.toastservice.presenttoast("Odds successfully changed.");
+              }, (err) => {
+                loader.dismiss();
+                this.toastservice.presenttoast("DB error");
+              })
+            })
           }
         }
       ]
     });
     alert.present();
+  }
+
+  lock() {
+    this.socket.emit("msg", { msg: "lock" });
+  }
+
+  unlock() {
+    this.socket.emit("msg", { msg: "unlock" });
   }
 
   doRefresh(refresher) {

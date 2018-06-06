@@ -54,6 +54,7 @@ export class PredPage {
   eombets: eombet[];
   players: player[];
   userpreds: userpred[];
+  disabled: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
@@ -68,39 +69,53 @@ export class PredPage {
         if (data.msg == "won") {
           this.predservice.get_per_user(this.session.id).subscribe(mypreds => {
             if (typeof mypreds.pred[0] != 'undefined'
-          && typeof data.btrs != 'undefined') {
+              && typeof data.btrs != 'undefined') {
               for (let i in mypreds.pred) {
                 for (let j in data.btrs) {
                   if (mypreds.pred[i].user_id == data.btrs[j].user_id
                     && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
-                  && mypreds.pred[i].Bet_id == data.betid) {
+                    && mypreds.pred[i].Bet_id == data.betid) {
                     this.won(data.betid);
                   }
                 }
               }
             }
           })
+        }
 
-        } else if (data.msg == "lost") {
+        else if (data.msg == "lost") {
           this.predservice.get_per_user(this.session.id).subscribe(mypreds => {
             if (typeof mypreds.pred[0] != 'undefined'
-          && typeof data.btrs != 'undefined') {
+              && typeof data.btrs != 'undefined') {
               for (let i in mypreds.pred) {
                 for (let j in data.btrs) {
                   if (mypreds.pred[i].user_id == data.btrs[j].user_id
                     && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
-                  && mypreds.pred[i].Bet_id == data.betid) {
+                    && mypreds.pred[i].Bet_id == data.betid) {
                     this.lost(data.betid);
                   }
                 }
               }
             }
           })
-        } else if (data.msg == "refresh") {
+        }
+
+        else if (data.msg == "refresh") {
           this.updatePage();
         }
-      })
 
+        else if (data.msg == "lock") {
+          this.disabled = true;
+        }
+
+        else if (data.msg == "unlock") {
+          this.disabled = false;
+        }
+
+        else if (data.msg == "loadbets") {
+          this.load_bets();
+        }
+      })
     });
   }
 
@@ -360,11 +375,11 @@ export class PredPage {
     profcard.style.display = "block";
     this.userservice.get_userpreds(id).subscribe(response => {
       this.userpreds = response.userpred;
-    })
+    });
 
     this.predservice.get_preds().then(mypreds => {
 
-    })
+    });
 
   }
 
@@ -385,7 +400,6 @@ export class PredPage {
   logout() {
     this.userservice.clear_storage();
     this.navCtrl.pop();
-    this.socket.emit("disconnect");
   }
 
 }
