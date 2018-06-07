@@ -38,8 +38,18 @@ export class DbService {
             .map(res => res.json());
     }
 
+    getalluserpreds() {
+        return this.http.get(this.url + 'userpreds/get/all')
+            .map(res => res.json());
+    }
+
     changeodds() {
         return this.http.get(this.url + 'bet/change')
+            .map(res => res.json());
+    }
+
+    getalluserpurchases() {
+        return this.http.get(this.url + "userpurchases/get/all")
             .map(res => res.json());
     }
 

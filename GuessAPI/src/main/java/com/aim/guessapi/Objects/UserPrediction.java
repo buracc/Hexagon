@@ -11,13 +11,20 @@ package com.aim.guessapi.Objects;
  */
 public class UserPrediction {
     
-    private String name;
+    private String name, username;
     private int amount, potential;
-
+    
     public UserPrediction(String name, int amount, int potential) {
         this.name = name;
         this.amount = amount;
         this.potential = potential;
+    }
+
+    public UserPrediction(String name, int amount, int potential, String username) {
+        this.name = name;
+        this.amount = amount;
+        this.potential = potential;
+        this.username = username;
     }
 
     public String getName() {
@@ -43,6 +50,15 @@ public class UserPrediction {
     public void setPotential(int potential) {
         this.potential = potential;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     
     
 }

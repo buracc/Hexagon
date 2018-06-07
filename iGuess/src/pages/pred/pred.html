@@ -86,18 +86,45 @@
 
   <!-- Profile -->
   <ion-card padding class="profcard" id="profcard">
-      <h1 text-center>Profile</h1>
-      <h2 text-center>My predictions</h2>
+    <h1 text-center>Profile</h1>
+    <h2 text-center>My predictions</h2>
 
-      <ion-list *ngFor="let up of userpreds">
-        
-        <ion-item>
-          <p>Name: {{up?.name}}</p>
-          <p>Wager: {{up?.amount}}</p>
-          <p>Potential win: {{up?.potential}}</p>
-        </ion-item>
-      </ion-list>
-    </ion-card>
+    <ion-list *ngFor="let up of userpreds">
+
+      <ion-item>
+        <p>Name: {{up?.name}}</p>
+        <p>Wager: {{up?.amount}}</p>
+        <p>Potential win: {{up?.potential}}</p>
+      </ion-item>
+    </ion-list>
+
+    <h2 text-center>My purchases</h2>
+
+    <ion-list *ngFor="let px of purchases">
+
+      <ion-item>
+        <p>Reward name: {{px?.name}}</p>
+        <p>Date: {{px?.date}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!-- Rewards -->
+  <ion-card padding class="rewardcard" id="rewardcard">
+    <h1 text-center>Rewards</h1>
+    <h2 text-center>Exchange points for rewards here!</h2>
+
+
+    <ion-list *ngFor="let r of rewards">
+      <ion-item>
+        <ion-row>
+          <p>Reward: {{r?.name}}
+            <br>Price: {{r?.price}}</p>
+          <button ion-button class="buy_btn" (click)="buy(r, this?.session)">Buy</button>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 
   <!-- Tab buttons -->
   <ion-row>
@@ -110,11 +137,15 @@
     </button>
 
     <button ion-fab class="tab_btn" (click)="go_play()">
-        Play
-      </button>
+      Play
+    </button>
 
     <button ion-fab class="tab_btn" (click)="go_profile(this?.session.id)">
       Profile
+    </button>
+
+    <button ion-fab class="tab_btn" (click)="go_rewards()">
+      Rewards
     </button>
 
     <button ion-fab class="tab_btn" (click)="logout(this?.session)">

@@ -49,6 +49,10 @@ page-home {
     display: none;
 }
 
+.rewardcard {
+    display: none;
+}
+
 .back_to_cats_btn {
     display: block;
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
@@ -58,6 +62,12 @@ page-home {
     display: block;
     margin: auto;
     min-width: 20%;
+    background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.buy_btn {
+    display: block;
+    margin-left: auto;
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
 }
 

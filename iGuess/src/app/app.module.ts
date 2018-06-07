@@ -16,6 +16,7 @@ import { BetService } from './services/bet.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { PredService } from './services/pred.service';
+import { RewardService } from './services/reward.service';
 
 let config: SocketIoConfig = {
   url: "145.28.223.96:3001",
@@ -51,6 +52,7 @@ let config: SocketIoConfig = {
     UserService,
     BetService,
     PredService,
+    RewardService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

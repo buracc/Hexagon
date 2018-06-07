@@ -7,6 +7,7 @@ import { ApiService } from '../../app/services/api.service';
 import { ToastService } from '../../app/services/toast.service';
 import { Socket } from 'ng-socket-io';
 import { PredService } from '../../app/services/pred.service';
+import { RewardService } from '../../app/services/reward.service';
 
 /**
  * Generated class for the PredPage page.
@@ -39,6 +40,16 @@ interface userpred {
   potential: number
 }
 
+interface reward {
+  name: String,
+  price: number
+}
+
+interface purchase {
+  name: String,
+  date: String
+}
+
 
 @IonicPage()
 @Component({
@@ -54,16 +65,20 @@ export class PredPage {
   eombets: eombet[];
   players: player[];
   userpreds: userpred[];
-  disabled: boolean = false;
+  rewards: reward[];
+  purchases: purchase[];
+  disabled: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public predservice: PredService,
-    public toastservice: ToastService, public socket: Socket) {
+    public toastservice: ToastService, public socket: Socket, public rewardservice: RewardService) {
+
 
     this.userservice.getUser().then(user => {
       this.session = user;
       this.updatePage();
+      socket.emit('connected', {user: this.session.name});
 
       socket.on("msg", data => {
         if (data.msg == "won") {
@@ -76,6 +91,7 @@ export class PredPage {
                     && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
                     && mypreds.pred[i].Bet_id == data.betid) {
                     this.won(data.betid);
+                    this.updatePage();
                   }
                 }
               }
@@ -93,6 +109,7 @@ export class PredPage {
                     && mypreds.pred[i].Bet_id == data.btrs[j].Bet_id
                     && mypreds.pred[i].Bet_id == data.betid) {
                     this.lost(data.betid);
+                    this.updatePage();
                   }
                 }
               }
@@ -114,6 +131,7 @@ export class PredPage {
 
         else if (data.msg == "loadbets") {
           this.load_bets();
+          this.updatePage();
         }
       })
     });
@@ -127,6 +145,7 @@ export class PredPage {
     eomcard.style.display = "block";
 
     this.load_bets();
+    this.updatePage();
   }
 
   display_rounds() {
@@ -137,6 +156,7 @@ export class PredPage {
     roundscard.style.display = "block";
 
     this.load_bets();
+    this.updatePage();
   }
 
   won(betid) {
@@ -144,7 +164,6 @@ export class PredPage {
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
 
-    console.log(betid);
     let postParams = {
       "Bet_id": betid,
       "id": 1
@@ -165,7 +184,6 @@ export class PredPage {
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
 
-    console.log(betid);
     let postParams = {
       "Bet_id": betid,
       "id": 0
@@ -240,6 +258,7 @@ export class PredPage {
           loader.dismiss();
         })
     })
+    this.updatePage();
   }
 
   back_to_cats() {
@@ -302,6 +321,7 @@ export class PredPage {
       ]
     });
     alert.present();
+    this.updatePage();
   }
 
   bet(amount, bet_id) {
@@ -333,12 +353,13 @@ export class PredPage {
         });
       });
     });
+    this.updatePage();
   }
 
   not_enough() {
     let alert = this.alertctrl.create({
       title: "Not enough points!",
-      message: "Not enough points to wager.",
+      message: "Not enough points to buy/wager.",
       buttons: [
         {
           text: 'Ok!',
@@ -350,6 +371,60 @@ export class PredPage {
       ]
     });
     alert.present();
+    this.updatePage();
+  }
+
+  buy(r, session) {
+
+    let alert = this.alertctrl.create({
+      title: name,
+      message: "Sure to buy this item?",
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+
+          }
+        },
+        {
+          text: 'Yes!',
+          handler: data => {
+            if (session.pts >= r.price) {
+              let loader = this.loaderctrl.create({
+                content: "Buying item..",
+              });
+
+              loader.present().then(() => {
+
+                var headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                let options = new RequestOptions({ headers: headers });
+
+                let postParams = {
+                  "reward_id": r.id,
+                  "user_id": session.id
+                }
+
+                this.http.post(this.api.url + "userpurchases/buy", postParams, options).subscribe((data) => {
+                  this.toastservice.presenttoast("Reward bought!")
+                  this.updatePage();
+                  loader.dismiss();
+                }, (err) => {
+                  this.toastservice.presenttoast("Failed to buy - connection error.")
+                  loader.dismiss();
+                });
+              });
+            } else {
+              this.not_enough();
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+    this.updatePage();
+
   }
 
   go_ranking() {
@@ -360,6 +435,7 @@ export class PredPage {
     var rankcard = document.getElementById("rankcard");
     this.hide_all_cards();
     rankcard.style.display = "block";
+    this.updatePage();
   }
 
   go_play() {
@@ -367,6 +443,7 @@ export class PredPage {
     this.updatePage();
     this.hide_all_cards();
     catscard.style.display = "block";
+    this.updatePage();
   }
 
   go_profile(id) {
@@ -376,11 +453,26 @@ export class PredPage {
     this.userservice.get_userpreds(id).subscribe(response => {
       this.userpreds = response.userpred;
     });
-
     this.predservice.get_preds().then(mypreds => {
 
     });
 
+
+    this.rewardservice.getrewards_by_id(id).subscribe(response => {
+      this.purchases = response.userpurchase;
+    });
+    this.updatePage();
+  }
+
+  go_rewards() {
+    var rewardcard = document.getElementById("rewardcard");
+    this.hide_all_cards();
+    rewardcard.style.display = "block";
+
+    this.rewardservice.getrewards().subscribe(response => {
+      this.rewards = response.reward;
+    });
+    this.updatePage();
   }
 
   hide_all_cards() {
@@ -389,15 +481,21 @@ export class PredPage {
     var roundscard = document.getElementById("roundscard");
     var rankcard = document.getElementById("rankcard");
     var profcard = document.getElementById("profcard");
+    var rewardcard = document.getElementById("rewardcard");
 
     eomcard.style.display = "none"
     catscard.style.display = "none";
     roundscard.style.display = "none";
     rankcard.style.display = "none";
     profcard.style.display = "none";
+    rewardcard.style.display = "none";
   }
 
   logout() {
+    this.userservice.getUser().then(activeuser => {
+      this.socket.emit('disconnected', {user: activeuser.name});
+    });
+    
     this.userservice.clear_storage();
     this.navCtrl.pop();
   }

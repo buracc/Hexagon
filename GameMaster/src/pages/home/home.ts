@@ -28,6 +28,19 @@ interface better {
   User_id: number
 }
 
+interface userpurchase {
+  id: number,
+  date: String,
+  username: String,
+  name: String,
+  user_id: number,
+  reward_id: number
+}
+
+interface userpred {
+
+}
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -39,12 +52,23 @@ export class HomePage {
   teams: team[];
   bets: bet[];
   betters: better[];
+  userpurchases: userpurchase[];
+  userpreds: userpred[];
+  onlineusers: any[];
 
   constructor(public navCtrl: NavController, public toastservice: ToastService,
     public socket: Socket, public dbservice: DbService, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public loaderctrl: LoadingController) {
 
-    this.update();
+      socket.on('admin', data => {
+        this.onlineusers = data;
+      })
+
+      this.update();
+  }
+
+  print(data) {
+    console.log(data);
   }
 
   add_team(team, player) {
@@ -172,18 +196,18 @@ export class HomePage {
             let loader = this.loaderctrl.create({
               content: "Loading..",
             });
-        
+
             loader.present().then(() => {
-        
+
               var headers = new Headers();
               headers.append('Content-Type', 'application/json');
               let options = new RequestOptions({ headers: headers });
-        
+
               let postParams = {
                 "id": id,
                 "multiplier": data.amount
               }
-        
+
               this.http.post(this.api.url + "bet/change", postParams, options).subscribe(data => {
                 this.socket.emit("msg", { msg: "loadbets" });
                 loader.dismiss();
@@ -228,6 +252,14 @@ export class HomePage {
 
     this.dbservice.getallbets().subscribe(response => {
       this.bets = response.bet;
+    })
+
+    this.dbservice.getalluserpurchases().subscribe(response => {
+      this.userpurchases = response.userpurchase;
+    })
+
+    this.dbservice.getalluserpreds().subscribe(response => {
+      this.userpreds = response.userpred;
     })
   }
 }

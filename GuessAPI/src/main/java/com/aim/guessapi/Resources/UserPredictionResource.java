@@ -46,4 +46,15 @@ public class UserPredictionResource {
         return sw.toString();
     }
     
+    @GET
+    @Path("/get/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAllPredictions() throws IOException, SQLException {
+        mapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+        userpreds = db.getAllUserPredictions();
+        JSON = new UserPredictionObj(userpreds);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(sw, JSON);
+        return sw.toString();
+    }
+    
 }

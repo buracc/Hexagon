@@ -55,4 +55,21 @@
     <button ion-button block text-center (click)="unlock()">Unlock bets</button>
   </ion-item>
 
+
+  <ion-item>
+    <p text-center>User purchases</p>
+    <p text-center *ngFor="let up of userpurchases">{{up.username}} - {{up.name}}</p>
+  </ion-item>
+
+  <ion-item>
+    <p text-center>User predictions</p>
+    <p text-center *ngFor="let upd of userpreds">{{upd.username}}: {{upd.name}} - Amount: {{upd.amount}}</p>
+  </ion-item>
+
+  <ion-item>
+      <p text-center>Online users</p>
+      <p text-center *ngFor="let o of onlineusers">{{o}}</p>
+    </ion-item>
+
+
 </ion-content>

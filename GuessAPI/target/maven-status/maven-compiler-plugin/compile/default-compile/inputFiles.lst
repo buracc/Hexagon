@@ -8,11 +8,17 @@
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Resources/TeamResource.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/User.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Resources/PredictionResource.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/UserPurchasesObj.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/Reward.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/UserObj.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/Prediction.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/UserPurchases.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/UserPredictionObj.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Resources/RewardResource.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/NewCrossOriginResourceSharingFilter.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/BetObj.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/RewardObj.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Resources/BetResource.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/Bet.java
+/Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Resources/UserPurchasesResource.java
 /Users/burak/Documents/Hexagon/GuessAPI/src/main/java/com/aim/guessapi/Objects/UserPrediction.java
