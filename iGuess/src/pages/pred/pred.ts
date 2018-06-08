@@ -78,7 +78,6 @@ export class PredPage {
     this.userservice.getUser().then(user => {
       this.session = user;
       this.updatePage();
-      socket.emit('connected', {user: this.session.name});
 
       socket.on("msg", data => {
         if (data.msg == "won") {
@@ -493,9 +492,9 @@ export class PredPage {
 
   logout() {
     this.userservice.getUser().then(activeuser => {
-      this.socket.emit('disconnected', {user: activeuser.name});
+      this.socket.emit('disconnected', { user: activeuser.name });
     });
-    
+
     this.userservice.clear_storage();
     this.navCtrl.pop();
   }

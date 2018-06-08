@@ -19,7 +19,7 @@ import { PredService } from './services/pred.service';
 import { RewardService } from './services/reward.service';
 
 let config: SocketIoConfig = {
-  url: "145.28.223.96:3001",
+  url: "localhost:3001",
   options: {}
 }
 

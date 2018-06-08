@@ -26,6 +26,11 @@ io.on('connection', (socket) => {
         connected.pop(data.user);
         io.emit('admin', connected);
     })
+
+    socket.on('disconnect', data => {
+        connected.pop(data.user);
+        io.emit('admin', connected);
+    })
     
     socket.on('msg', data => {
         io.emit('msg', data);

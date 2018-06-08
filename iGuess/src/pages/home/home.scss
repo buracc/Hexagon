@@ -77,6 +77,12 @@ page-home {
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
 }
 
+.play_btn {
+    margin: auto;
+    margin-top: 10%;
+    background: linear-gradient(90deg,color($colors, grad3),color($colors, grad4));
+}
+
 .admin_btn {
     display: block;
     margin: auto;

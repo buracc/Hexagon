@@ -5,6 +5,7 @@ import { ToastService } from '../../app/services/toast.service';
 import { UserService } from '../../app/services/user.service';
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { ApiService } from '../../app/services/api.service';
+import { Socket } from 'ng-socket-io';
 
 /**
  * Generated class for the NameEnterPage page.
@@ -25,7 +26,8 @@ export class NameEnterPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public toastservice: ToastService, public loaderctrl: LoadingController,
-    public userservice: UserService, public api: ApiService, public http: Http) {
+    public userservice: UserService, public api: ApiService, public http: Http,
+    public socket: Socket) {
 
   }
 
@@ -48,7 +50,7 @@ export class NameEnterPage {
             this.gohome();
             this.toastservice.presenttoast("Welcome back " + this.userservice.nick + ".");
             this.userservice.storeUser(user);
-            
+            this.socket.emit('connected', { user: this.nick }); 
 
           } else {
             var headers = new Headers();
@@ -59,10 +61,12 @@ export class NameEnterPage {
               "name": this.nick,
               "pts": 100
             }
+            
+            this.socket.emit('connected', { user: this.nick }); 
 
             this.http.post(this.api.url + "user/new", postParams, options).subscribe(data => {
               this.toastservice.presenttoast("Successfully registered as " + this.nick + "!")
-              
+
               this.userservice.pts = 100;
               this.userservice.nick = this.nick;
               this.userservice.getbyname(this.userservice.nick).subscribe(response => {
@@ -71,7 +75,7 @@ export class NameEnterPage {
               })
             })
           }
-          
+
           loader.dismiss();
         }, (err) => {
           this.toastservice.presenttoast("Connection error. Try again later.");
