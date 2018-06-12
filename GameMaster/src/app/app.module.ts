@@ -13,8 +13,13 @@ import { ApiService } from './services/api.service';
 import { HttpModule } from '@angular/http';
 import { ToastService } from './services/toast.service';
 
+// var ip = "79.143.178.40:";
+var ip = "145.28.164.121:";
+// var ip = "localhost:";
+var port = 3001;
+
 let config: SocketIoConfig = {
-  url: "localhost:3001",
+  url: ip + port,
   options: {}
 }
 

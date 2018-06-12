@@ -6,6 +6,12 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <ion-fab top right>
+    <button ion-fab mini class="trivia_notify" id="trivia_notify" (click)="answer_trivia(this?.trivia_q)">
+      <b>!</b>
+    </button>
+  </ion-fab>
+
   <ion-card class="cardtop10">
     <ion-card-content>
       Name: {{this.session?.name}}
@@ -39,13 +45,16 @@
   <ion-card padding class="eomcard" id="eomcard">
     <h2 text-center>End of match predictions</h2>
 
+    <p text-center>One CS:GO match could have up to 30 rounds. What will the end result be after all those rounds? The button shows the
+      multiplier (your wager times the multiplier is how much you can win).
+    </p>
     <ion-list *ngFor="let e of eombets">
       <ion-item>
-        <p>{{e?.name}}</p>
-        <div>
-          <button [disabled]="disabled" text-center ion-button id="eom_bet_btn" class="bet_btn" (click)="new_bet(e?.id, e?.name, e?.multiplier)">{{e?.multiplier}}x</button>
-        </div>
-
+        <ion-row>
+          <p>{{e?.name}}</p>
+          <br>
+          <button text-center ion-button id="eom_bet_btn" class="bet_btn" (click)="new_bet(e?.id, e?.name, e?.multiplier)">{{e?.multiplier}}x</button>
+        </ion-row>
       </ion-item>
     </ion-list>
 
@@ -58,13 +67,19 @@
   <ion-card padding class="roundscard" id="roundscard">
     <h2 text-center>Round predictions</h2>
 
+    <p text-center>In A CS:GO match there are rounds of up to two minutes (excluding bomb time). What will happen during those two minutes?
+      <br>Before a round starts, there are 20 seconds of 'buy-time' where players can buy their weapons and gear. During those
+      20 seconds you can place your predictions. Use your time wisely. The button shows the multiplier (your wager times
+      the multiplier is how much you can win).
+    </p>
+
     <ion-list *ngFor="let r of roundbets">
       <ion-item>
-        <p>{{r?.name}}</p>
-        <div>
+        <ion-row>
+          <p>{{r?.name}}</p>
+          <br>
           <button [disabled]="disabled" text-center ion-button id="round_bet_btn" class="bet_btn" (click)="new_bet(r?.id, r?.name, r?.multiplier)">{{r?.multiplier}}x</button>
-        </div>
-
+        </ion-row>
       </ion-item>
     </ion-list>
 

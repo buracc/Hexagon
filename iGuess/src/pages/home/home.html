@@ -1,17 +1,39 @@
-<ion-content padding class="main"> 
+<ion-content padding class="main">
   <ion-card padding class="cardtop50">
     <ion-card-content>
-      Description title goes here
-      <p>
-         This is a description of the application. 
-         Just testing and seeing if the text stays inside the box.
-      </p>
-      
+      <ion-slides pager flex>
+        <ion-slide>
+          Hexagon
+          <p>
+            Welcome to Hexagon.
+          </p>
+        </ion-slide>
+        <ion-slide>
+          Predict
+          <p>
+            Predict and win points.
+          </p>
+        </ion-slide>
+        <ion-slide>
+          Trivia
+          <p>
+            Gain points through trivia
+          </p>
+        </ion-slide>
+        <ion-slide>
+          Leaderboard
+          <p>
+            See who you're competing against.
+          </p>
+        </ion-slide>
+        <br><br><br>
+      </ion-slides>
+
     </ion-card-content>
   </ion-card>
 
   <button ion-fab text-center class="btncenter" (click)="goNext()">
     <ion-icon name="md-arrow-round-forward"></ion-icon>
   </button>
-  
+
 </ion-content>

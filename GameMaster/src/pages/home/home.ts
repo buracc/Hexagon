@@ -41,6 +41,10 @@ interface userpred {
 
 }
 
+interface question {
+
+}
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -54,6 +58,7 @@ export class HomePage {
   betters: better[];
   userpurchases: userpurchase[];
   userpreds: userpred[];
+  questions: question[];
   onlineusers: any[];
 
   constructor(public navCtrl: NavController, public toastservice: ToastService,
@@ -69,6 +74,17 @@ export class HomePage {
 
   print(data) {
     console.log(data);
+  }
+
+  trivia(question) {
+    let loader = this.loaderctrl.create({
+      content: "Loading..",
+    });
+
+    loader.present().then(() => {
+      this.socket.emit("msg", {msg: "trivia", q: question});
+      loader.dismiss();
+    })
   }
 
   add_team(team, player) {
@@ -260,6 +276,10 @@ export class HomePage {
 
     this.dbservice.getalluserpreds().subscribe(response => {
       this.userpreds = response.userpred;
+    })
+
+    this.dbservice.getallquestions().subscribe(response => {
+      this.questions = response.question;
     })
   }
 }

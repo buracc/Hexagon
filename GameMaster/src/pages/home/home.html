@@ -55,6 +55,17 @@
     <button ion-button block text-center (click)="unlock()">Unlock bets</button>
   </ion-item>
 
+  <ion-list>
+    <p text-center>Trivia</p>
+    <ion-item>
+      <ion-label>Question</ion-label>
+      <ion-select [(ngModel)]="question" interface="action-sheet">
+        <ion-option *ngFor="let q of questions" (ionSelect)="trivia(q)">{{q.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <!-- <button ion-button block text-center (click)="trivia()">Send notification</button> -->
+  </ion-list>
+
 
   <ion-item>
     <p text-center>User purchases</p>
@@ -67,9 +78,8 @@
   </ion-item>
 
   <ion-item>
-      <p text-center>Online users</p>
-      <p text-center *ngFor="let o of onlineusers">{{o}}</p>
-    </ion-item>
-
+    <p text-center>Online users</p>
+    <p text-center *ngFor="let o of onlineusers">{{o}}</p>
+  </ion-item>
 
 </ion-content>

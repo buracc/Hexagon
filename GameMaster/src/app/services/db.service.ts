@@ -53,4 +53,9 @@ export class DbService {
             .map(res => res.json());
     }
 
+    getallquestions() {
+        return this.http.get(this.url + "question/get/all")
+            .map(res => res.json());
+    }
+
 }

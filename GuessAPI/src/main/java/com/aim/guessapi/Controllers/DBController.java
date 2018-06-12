@@ -2,9 +2,11 @@ package com.aim.guessapi.Controllers;
 
 import com.aim.guessapi.Objects.Bet;
 import com.aim.guessapi.Objects.Prediction;
+import com.aim.guessapi.Objects.Question;
 import com.aim.guessapi.Objects.Reward;
 import com.aim.guessapi.Objects.Team;
 import com.aim.guessapi.Objects.User;
+import com.aim.guessapi.Objects.UserAnswers;
 import com.aim.guessapi.Objects.UserPrediction;
 import com.aim.guessapi.Objects.UserPurchases;
 import java.sql.Connection;
@@ -34,7 +36,7 @@ public class DBController {
     private final String USER = "chin";
     private final String PASS = "112123";
 
-    public void Connect() {
+    public void Connect(String s) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -44,6 +46,7 @@ public class DBController {
 
         try {
             conn = DriverManager.getConnection("jdbc:mysql://" + IP + ":3306/pred", USER, PASS);
+            System.out.println(s + " success.");
         } catch (SQLException e) {
             System.out.println("sql failed to connect");
             e.printStackTrace();
@@ -129,8 +132,18 @@ public class DBController {
         return fetchUserPurchasesFromDB(q);
     }
 
+    public List<Question> getAllQuestions() throws SQLException {
+        String q = "SELECT * FROM Question;";
+        return fetchQuestionsFromDB(q);
+    }
+    
+    public List<UserAnswers> getAllUserAnswers() throws SQLException {
+        String q = "SELECT * FROM UserAnswers";
+        return fetchUserAnswersFromDB(q);
+    }
+
     public List<User> fetchUserFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch user");
         List<User> users = new ArrayList();
 
         try {
@@ -156,7 +169,7 @@ public class DBController {
     }
 
     public List<Bet> fetchBetFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch bet");
         List<Bet> bets = new ArrayList();
 
         try {
@@ -170,10 +183,10 @@ public class DBController {
 
                 if (name.startsWith("eom_")) {
                     if (name.endsWith("win_a")) {
-                        name = "Team mousesports to win the entire match.";
+                        name = "Team A to win the entire match.";
                     }
                     if (name.endsWith("win_b")) {
-                        name = "Team Renegades to win the entire match.";
+                        name = "Team B to win the entire match.";
                     }
                     if (name.endsWith("objective")) {
                         name = "Match will have more objective wins.";
@@ -185,16 +198,16 @@ public class DBController {
 
                 if (name.startsWith("live_")) {
                     if (name.endsWith("round_a")) {
-                        name = "Team mousesports to win this round.";
+                        name = "Team A to win this round.";
                     }
                     if (name.endsWith("round_b")) {
-                        name = "Team Renegades to win this round.";
+                        name = "Team B to win this round.";
                     }
                     if (name.endsWith("fb_a")) {
-                        name = "Team mousesports to get the first kill.";
+                        name = "Team A to get the first kill.";
                     }
                     if (name.endsWith("fb_b")) {
-                        name = "Team Renegades to get the first kill.";
+                        name = "Team B to get the first kill.";
                     }
                 }
                 Bet b = new Bet(id, name, multiplier);
@@ -209,7 +222,7 @@ public class DBController {
     }
 
     public List<Team> fetchTeamFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch team");
         List<Team> teams = new ArrayList();
 
         try {
@@ -232,7 +245,7 @@ public class DBController {
     }
 
     public List<Prediction> fetchPredictionsFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch prediction");
         List<Prediction> predictions = new ArrayList();
 
         try {
@@ -259,7 +272,7 @@ public class DBController {
     }
 
     public List<UserPrediction> fetchUserPredictionsFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch user");
         List<UserPrediction> userpreds = new ArrayList();
 
         try {
@@ -316,7 +329,7 @@ public class DBController {
     }
 
     public List<UserPurchases> fetchUserPurchasesFromDB(String q) throws SQLException {
-        Connect();
+        Connect("Fetch user purchase");
         List<UserPurchases> userpurchases = new ArrayList();
 
         try {
@@ -342,9 +355,82 @@ public class DBController {
         conn.close();
         return userpurchases;
     }
+    
+    private List<Reward> fetchRewardsFromDB(String q) throws SQLException {
+        Connect("Fetch rewards");
+        List<Reward> rewards = new ArrayList();
+
+        try {
+            pst = conn.prepareStatement(q);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int price = rs.getInt("price");
+
+                Reward r = new Reward(id, name, price);
+                rewards.add(r);
+
+                
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        conn.close();
+        return rewards;
+    }
+
+    public List<Question> fetchQuestionsFromDB(String q) throws SQLException {
+        Connect("Fetch questions");
+        List<Question> questions = new ArrayList();
+
+        try {
+            pst = conn.prepareStatement(q);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+
+                Question qu = new Question(id, name);
+                questions.add(qu);
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        conn.close();
+        return questions;
+    }
+    
+    public List<UserAnswers> fetchUserAnswersFromDB(String q) throws SQLException {
+        Connect("Fetch user answers");
+        List<UserAnswers> useranswers = new ArrayList();
+
+        try {
+            pst = conn.prepareStatement(q);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int User_id = rs.getInt("User_id");
+                int Question_id = rs.getInt("Question_id");
+                String answer = rs.getString("answer");
+
+                UserAnswers ua = new UserAnswers(User_id, Question_id, answer);
+                useranswers.add(ua);
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        conn.close();
+        return useranswers;
+    }
 
     public String addNewUser(User u) {
-        Connect();
+        Connect("Add new user");
         String q = "INSERT INTO User (name, pts, Team_id) VALUES (?, ?, 4)";
 
         try {
@@ -362,7 +448,7 @@ public class DBController {
     }
 
     public String setTeam(User u) {
-        Connect();
+        Connect("Set team");
         String q = "UPDATE User u SET u.Team_id = (SELECT id from Team t where t.name = ?) WHERE u.name = ?";
 
         try {
@@ -380,7 +466,7 @@ public class DBController {
     }
 
     public String newPrediction(Prediction p) {
-        Connect();
+        Connect("New prediction");
         String q = "UPDATE pred.User SET pts = (pts - ?) WHERE id = ?;";
         String q2 = "INSERT INTO pred.Prediction (amount, Bet_id, User_id) VALUES (?, ?, ?);";
 
@@ -406,7 +492,7 @@ public class DBController {
     }
 
     public String predictionResult(Prediction p) {
-        Connect();
+        Connect("Prediction result");
         String q = "CALL give_pts(?, ?);";
 
         try {
@@ -426,7 +512,7 @@ public class DBController {
     }
 
     public String changeOdds(Bet b) {
-        Connect();
+        Connect("Change odds");
         String q = "UPDATE Bet SET multiplier = ? WHERE id = ?;";
 
         try {
@@ -446,7 +532,7 @@ public class DBController {
     }
 
     public String buyReward(UserPurchases u) {
-        Connect();
+        Connect("Buy reward");
         String q = "INSERT INTO UserPurchases (Reward_id, User_id, date) VALUES (?, ?, NOW());";
         String q2 = "UPDATE User "
                 + "SET pts = pts - (SELECT price FROM Reward WHERE id = ?) "
@@ -469,31 +555,27 @@ public class DBController {
         }
         return null;
     }
-
-    private List<Reward> fetchRewardsFromDB(String q) throws SQLException {
-        Connect();
-        List<Reward> rewards = new ArrayList();
-
+    
+    public String answerTrivia(UserAnswers ua) {
+        Connect("Trivia answer");
+        String q = "INSERT INTO UserAnswers VALUES (?, ?, ?)";
+        
         try {
             pst = conn.prepareStatement(q);
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int price = rs.getInt("price");
-
-                Reward r = new Reward(id, name, price);
-                rewards.add(r);
-
-            }
-
+            
+            pst.setInt(1, ua.getUser_id());
+            pst.setInt(2, ua.getQuestion_id());
+            pst.setString(3, ua.getAnswer());
+            
+            pst.executeUpdate();
+            conn.close();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        conn.close();
-        return rewards;
+        return null;
     }
+
+    
 
 }

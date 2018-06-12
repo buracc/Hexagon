@@ -29,5 +29,4 @@ export class RewardService {
         return this.http.get(url + id)
         .map(res => res.json());
     }
-
 }

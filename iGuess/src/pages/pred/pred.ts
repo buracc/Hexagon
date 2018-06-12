@@ -68,12 +68,12 @@ export class PredPage {
   rewards: reward[];
   purchases: purchase[];
   disabled: boolean = true;
+  trivia_q: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public predservice: PredService,
     public toastservice: ToastService, public socket: Socket, public rewardservice: RewardService) {
-
 
     this.userservice.getUser().then(user => {
       this.session = user;
@@ -132,6 +132,11 @@ export class PredPage {
           this.load_bets();
           this.updatePage();
         }
+
+        else if (data.msg == "trivia" && user != null) {
+          this.trivia_q = data.q;
+          this.show_notification();
+        }
       })
     });
   }
@@ -158,6 +163,71 @@ export class PredPage {
     this.updatePage();
   }
 
+  show_notification() {
+    var notify = document.getElementById("trivia_notify");
+    notify.style.display = "block";
+  }
+
+  answer_trivia(q) {
+    let alert = this.alertctrl.create({
+      title: "Trivia",
+      message: q.name,
+      inputs: [
+        {
+          name: 'answer',
+          placeholder: 'Answer'
+        }],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+
+          }
+        },
+        {
+          text: 'Submit',
+          handler: data => {
+
+            var notify = document.getElementById("trivia_notify");
+            notify.style.display = "none"
+
+            let loader = this.loaderctrl.create({
+              content: "Submitting answer..",
+            });
+
+            loader.present().then(() => {
+              this.userservice.getUser().then((user) => {
+
+                var headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                let options = new RequestOptions({ headers: headers });
+
+                let postParams = {
+                  "user_id": user.id,
+                  "question_id": q.id,
+                  "answer": data.answer
+                }
+
+                this.http.post(this.api.url + "useranswers/new", postParams, options).subscribe((data) => {
+                  this.toastservice.presenttoast("Thanks! Here are 25 points!")
+                  this.updatePage();
+                  loader.dismiss();
+                }, (err) => {
+                  this.toastservice.presenttoast("Failed to submit answer - connection error.")
+                  loader.dismiss();
+                });
+              });
+            });
+            this.updatePage();
+          }
+        }
+      ]
+    });
+    alert.present();
+    this.updatePage();
+  }
+
   won(betid) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -175,7 +245,7 @@ export class PredPage {
     })
 
     this.updatePage();
-    this.toastservice.presenttoast("Your bet won!");
+    this.toastservice.presenttoast("Your prediction won!");
   }
 
   lost(betid) {
@@ -195,15 +265,10 @@ export class PredPage {
     })
 
     this.updatePage();
-    this.toastservice.presenttoast("Your bet lost..");
+    this.toastservice.presenttoast("Your prediction lost..");
   }
 
   updatePage() {
-    // let loader = this.loaderctrl.create({
-    //   content: "Loading..",
-    // });
-
-    // loader.present().then(() => {
 
     this.userservice.getUser().then(user => {
       this.userservice.getbyname(user.name).subscribe(response => {
@@ -214,17 +279,12 @@ export class PredPage {
             this.predservice.storePreds(response.pred[i]);
           }
         })
-        // loader.dismiss();
       }, (err) => {
         this.toastservice.presenttoast("Connection error.");
-        // loader.dismiss();
       })
     }, (err) => {
       this.toastservice.presenttoast("Error retrieving user info from DB. Try refreshing this page.")
     })
-
-
-    // })
   }
 
   load_bets() {
@@ -326,7 +386,7 @@ export class PredPage {
   bet(amount, bet_id) {
 
     let loader = this.loaderctrl.create({
-      content: "Placing bet..",
+      content: "Placing prediction..",
     });
 
     loader.present().then(() => {

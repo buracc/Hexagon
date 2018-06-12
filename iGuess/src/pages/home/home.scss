@@ -60,8 +60,8 @@ page-home {
 
 .bet_btn {
     display: block;
-    margin: auto;
-    min-width: 20%;
+    margin-left: auto;
+    max-width: 20%;
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
 }
 
@@ -88,4 +88,14 @@ page-home {
     margin: auto;
     margin-top: 10%;
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.trivia_notify {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.822);
+    color: rgb(165, 29, 29);
+}
+
+.swiper-container-horizontal > .swiper-pagination-bullets {
+    bottom: -1px;
 }
