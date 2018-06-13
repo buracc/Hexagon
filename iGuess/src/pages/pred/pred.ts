@@ -69,7 +69,7 @@ export class PredPage {
   purchases: purchase[];
   disabled: boolean = true;
   trivia_q: any;
-
+ 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public predservice: PredService,
@@ -133,10 +133,12 @@ export class PredPage {
           this.updatePage();
         }
 
-        else if (data.msg == "trivia" && user != null) {
+        else if (data.msg == "trivia") {
           this.trivia_q = data.q;
           this.show_notification();
         }
+
+        this.updatePage();
       })
     });
   }
@@ -412,6 +414,7 @@ export class PredPage {
         });
       });
     });
+    this.socket.emit('admin', {msg: 'refresh'});
     this.updatePage();
   }
 
@@ -482,8 +485,8 @@ export class PredPage {
       ]
     });
     alert.present();
+    this.socket.emit('admin', {msg: 'refresh'});
     this.updatePage();
-
   }
 
   go_ranking() {

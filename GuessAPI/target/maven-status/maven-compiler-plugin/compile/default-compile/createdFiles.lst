@@ -7,7 +7,11 @@ com/aim/guessapi/Resources/UserResource.class
 com/aim/guessapi/Objects/Reward.class
 com/aim/guessapi/Resources/TeamResource.class
 com/aim/guessapi/Objects/UserObj.class
+com/aim/guessapi/Objects/QuestionObj.class
+com/aim/guessapi/Objects/UserAnswers.class
 com/aim/guessapi/Resources/PredictionResource.class
+com/aim/guessapi/Objects/UserAnswersObj.class
+com/aim/guessapi/Resources/QuestionResource.class
 NewCrossOriginResourceSharingFilter.class
 com/aim/guessapi/Resources/RewardResource.class
 com/aim/guessapi/App/App.class
@@ -15,6 +19,7 @@ com/aim/guessapi/Objects/PredictionObj.class
 com/aim/guessapi/Objects/RewardObj.class
 com/aim/guessapi/Objects/Team.class
 com/aim/guessapi/Objects/BetObj.class
+com/aim/guessapi/Objects/Question.class
 com/aim/guessapi/Objects/TeamObj.class
 com/aim/guessapi/Objects/UserPrediction.class
 com/aim/guessapi/Objects/Prediction.class
@@ -22,3 +27,4 @@ com/aim/guessapi/Objects/UserPurchasesObj.class
 com/aim/guessapi/Resources/UserPurchasesResource.class
 com/aim/guessapi/Objects/UserPurchases.class
 com/aim/guessapi/Resources/BetResource.class
+com/aim/guessapi/Resources/UserAnswersResource.class

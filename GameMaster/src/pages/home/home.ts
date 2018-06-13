@@ -67,6 +67,10 @@ export class HomePage {
 
       socket.on('admin', data => {
         this.onlineusers = data;
+
+        if (data.msg == "refresh") {
+          this.update();
+        }
       })
 
       this.update();
