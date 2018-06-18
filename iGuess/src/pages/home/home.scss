@@ -6,13 +6,17 @@ page-home {
     
 }
 
+.card {
+    max-width: auto;
+}
+
 .cardtop50 {
    margin-top: 50%; 
 }
 
 .cardtop10 {
     margin-top: 10%;
-    margin-bottom: 30%;
+    margin-bottom: 10%;
 }
 
 .btncenter {
@@ -42,7 +46,7 @@ page-home {
 }
 
 .rankcard {
-    display: none;
+    display: block;
 }
 
 .profcard {
@@ -75,6 +79,12 @@ page-home {
     margin: auto;
     margin-top: 10%;
     background: linear-gradient(90deg,color($colors, grad1),color($colors, grad2));
+}
+
+.logout_btn {
+    margin: auto;
+    margin-top: 10%;
+    background: linear-gradient(90deg,color($colors, grad1_logout),color($colors, grad2_logout));
 }
 
 .play_btn {

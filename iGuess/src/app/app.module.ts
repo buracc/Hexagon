@@ -18,8 +18,8 @@ import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { PredService } from './services/pred.service';
 import { RewardService } from './services/reward.service';
 
-var ip = "79.143.178.40:";
-// var ip = "145.28.155.219:";
+// var ip = "79.143.178.40:";
+var ip = "145.28.147.55:";
 // var ip = "localhost:";
 var port = 3001;
 

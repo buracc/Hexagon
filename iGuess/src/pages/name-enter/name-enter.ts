@@ -50,7 +50,7 @@ export class NameEnterPage {
             this.gohome();
             this.toastservice.presenttoast("Welcome back " + this.userservice.nick + ".");
             this.userservice.storeUser(user);
-            this.socket.emit('connected', { user: this.nick }); 
+            this.socket.emit('connected', { user: this.nick });
 
           } else {
             var headers = new Headers();
@@ -61,8 +61,8 @@ export class NameEnterPage {
               "name": this.nick,
               "pts": 100
             }
-            
-            this.socket.emit('connected', { user: this.nick }); 
+
+            this.socket.emit('connected', { user: this.nick });
 
             this.http.post(this.api.url + "user/new", postParams, options).subscribe(data => {
               this.toastservice.presenttoast("Successfully registered as " + this.nick + "!")

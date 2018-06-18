@@ -13,8 +13,8 @@ import { ApiService } from './services/api.service';
 import { HttpModule } from '@angular/http';
 import { ToastService } from './services/toast.service';
 
-var ip = "79.143.178.40:";
-// var ip = "145.28.155.219:";
+// var ip = "79.143.178.40:";
+var ip = "145.28.147.55:";
 // var ip = "localhost:";
 var port = 3001;
 

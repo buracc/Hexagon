@@ -9,8 +9,8 @@ export class ApiService {
 
     constructor() {
         this.apiport = 8080;
-        this.ip = "79.143.178.40"
-        // this.ip = "145.28.155.219"
+        // this.ip = "79.143.178.40"
+        this.ip = "145.28.147.55"
 
         this.url = "http://" + this.ip + ":" + this.apiport + "/GuessAPI/";
     }

@@ -69,7 +69,11 @@ export class PredPage {
   purchases: purchase[];
   disabled: boolean = true;
   trivia_q: any;
- 
+
+  won_log: any[];
+  lost_log: any[];
+  bet_log: any[];
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public predservice: PredService,
@@ -91,11 +95,12 @@ export class PredPage {
                     && mypreds.pred[i].Bet_id == data.betid) {
                     this.won(data.betid);
                     this.updatePage();
+                    this.socket.emit('msg', { won: user });
                   }
                 }
               }
             }
-          })
+          });
         }
 
         else if (data.msg == "lost") {
@@ -109,11 +114,12 @@ export class PredPage {
                     && mypreds.pred[i].Bet_id == data.betid) {
                     this.lost(data.betid);
                     this.updatePage();
+                    this.socket.emit('msg', { lost: user });
                   }
                 }
               }
             }
-          })
+          });
         }
 
         else if (data.msg == "refresh") {
@@ -138,7 +144,29 @@ export class PredPage {
           this.show_notification();
         }
 
+        else if (data.won != null) {
+          var win = [];
+          win.push(data.won);
+          this.won_log = win;
+        }
+
+        else if (data.lost != null) {
+          var lose = [];
+          lose.push(data.lost);
+          this.lost_log = lose;
+          console.log(this.lost_log);
+        }
+
         this.updatePage();
+      })
+
+      socket.on('log_bets', data => {
+        var bets = [];
+        for (let i in data) {
+          bets.push(data[i].log_bets);
+        }
+        this.bet_log = bets;
+
       })
     });
   }
@@ -271,12 +299,16 @@ export class PredPage {
   }
 
   updatePage() {
+    this.userservice.getallplayers().subscribe(response => {
+      this.players = response.user;
+    });
 
     this.userservice.getUser().then(user => {
       this.userservice.getbyname(user.name).subscribe(response => {
         this.userservice.storeUser(response.user[0]);
         this.session = response.user[0];
         this.predservice.get_per_user(this.session.id).subscribe(response => {
+          this.refresh_profile(this.session.id);
           for (let i in response.pred) {
             this.predservice.storePreds(response.pred[i]);
           }
@@ -373,6 +405,7 @@ export class PredPage {
           text: 'Go!',
           handler: data => {
             if (this.session.pts >= data.amount) {
+              var amnt = data.amount;
               this.bet(data.amount, id);
             } else {
               this.not_enough();
@@ -404,8 +437,12 @@ export class PredPage {
           "User_id": user.id
         }
 
+        var username = user.name;
+        var time = new Date().toLocaleTimeString();
+
         this.http.post(this.api.url + "pred/new", postParams, options).subscribe((data) => {
           this.toastservice.presenttoast("Wager successful! Good luck!")
+          this.socket.emit('log_bets', { log_bets: { time, username, bet_id, amount } });
           this.updatePage();
           loader.dismiss();
         }, (err) => {
@@ -414,7 +451,7 @@ export class PredPage {
         });
       });
     });
-    this.socket.emit('admin', {msg: 'refresh'});
+    this.socket.emit('admin', { msg: 'refresh' });
     this.updatePage();
   }
 
@@ -484,19 +521,9 @@ export class PredPage {
         }
       ]
     });
+
     alert.present();
-    this.socket.emit('admin', {msg: 'refresh'});
-    this.updatePage();
-  }
-
-  go_ranking() {
-    this.userservice.getallplayers().subscribe(response => {
-      this.players = response.user;
-    });
-
-    var rankcard = document.getElementById("rankcard");
-    this.hide_all_cards();
-    rankcard.style.display = "block";
+    this.socket.emit('admin', { msg: 'refresh' });
     this.updatePage();
   }
 
@@ -512,6 +539,11 @@ export class PredPage {
     var profcard = document.getElementById("profcard");
     this.hide_all_cards();
     profcard.style.display = "block";
+    this.refresh_profile(id);
+    this.updatePage();
+  }
+
+  refresh_profile(id) {
     this.userservice.get_userpreds(id).subscribe(response => {
       this.userpreds = response.userpred;
     });
@@ -519,11 +551,9 @@ export class PredPage {
 
     });
 
-
     this.rewardservice.getrewards_by_id(id).subscribe(response => {
       this.purchases = response.userpurchase;
     });
-    this.updatePage();
   }
 
   go_rewards() {
@@ -541,14 +571,14 @@ export class PredPage {
     var catscard = document.getElementById("catscard");
     var eomcard = document.getElementById("eomcard");
     var roundscard = document.getElementById("roundscard");
-    var rankcard = document.getElementById("rankcard");
+    // var rankcard = document.getElementById("rankcard");
     var profcard = document.getElementById("profcard");
     var rewardcard = document.getElementById("rewardcard");
 
     eomcard.style.display = "none"
     catscard.style.display = "none";
     roundscard.style.display = "none";
-    rankcard.style.display = "none";
+    // rankcard.style.display = "none";
     profcard.style.display = "none";
     rewardcard.style.display = "none";
   }

@@ -12,6 +12,7 @@ var server = module.exports = http.createServer(app);
 var io = require("socket.io").listen(server);
 
 var connected = [];
+var log_bets = [];
 
 io.on('connection', (socket) => {
 
@@ -35,11 +36,16 @@ io.on('connection', (socket) => {
     socket.on('msg', data => {
         io.emit('msg', data);
     });
+
+    socket.on('log_bets', data => {
+        log_bets.push(data);
+        io.emit('log_bets', log_bets)
+    })
 });
 
 var port = process.env.PORT || 3001;
 
-server.listen(port, function () {
+server.listen(port, function() {
     console.log("Listening on: " + port);
 });
 
