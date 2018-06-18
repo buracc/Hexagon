@@ -80,6 +80,10 @@ export class HomePage {
     console.log(data);
   }
 
+  send_message(message) {
+    this.socket.emit('msg', {msg: "notification", notify: message});
+  }
+
   trivia(question) {
     let loader = this.loaderctrl.create({
       content: "Loading..",

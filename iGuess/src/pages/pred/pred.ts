@@ -155,6 +155,10 @@ export class PredPage {
           lose.push(data.lost);
           this.lost_log = lose;
           console.log(this.lost_log);
+        } 
+        
+        else if (data.msg == "notification") {
+          this.toastservice.presenttoast(data.notify);
         }
 
         this.updatePage();
@@ -166,8 +170,7 @@ export class PredPage {
           bets.push(data[i].log_bets);
         }
         this.bet_log = bets;
-
-      })
+      });
     });
   }
 
