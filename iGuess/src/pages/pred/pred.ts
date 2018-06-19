@@ -8,6 +8,7 @@ import { ToastService } from '../../app/services/toast.service';
 import { Socket } from 'ng-socket-io';
 import { PredService } from '../../app/services/pred.service';
 import { RewardService } from '../../app/services/reward.service';
+import { TeamService } from '../../app/services/team.service';
 
 /**
  * Generated class for the PredPage page.
@@ -69,6 +70,7 @@ export class PredPage {
   purchases: purchase[];
   disabled: boolean = true;
   trivia_q: any;
+  teampts: any[];
 
   won_log: any[];
   lost_log: any[];
@@ -77,7 +79,8 @@ export class PredPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public userservice: UserService,
     public betservice: BetService, public loaderctrl: LoadingController, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public predservice: PredService,
-    public toastservice: ToastService, public socket: Socket, public rewardservice: RewardService) {
+    public toastservice: ToastService, public socket: Socket, public rewardservice: RewardService,
+    public teamservice: TeamService) {
 
     this.userservice.getUser().then(user => {
       this.session = user;
@@ -154,13 +157,11 @@ export class PredPage {
           var lose = [];
           lose.push(data.lost);
           this.lost_log = lose;
-          console.log(this.lost_log);
-        } 
-        
+        }
+
         else if (data.msg == "notification") {
           this.toastservice.presenttoast(data.notify);
         }
-
         this.updatePage();
       })
 
@@ -306,6 +307,10 @@ export class PredPage {
       this.players = response.user;
     });
 
+    this.teamservice.getteamswithpoints().subscribe(response => {
+      this.teampts = response.team;
+    })
+
     this.userservice.getUser().then(user => {
       this.userservice.getbyname(user.name).subscribe(response => {
         this.userservice.storeUser(response.user[0]);
@@ -408,7 +413,6 @@ export class PredPage {
           text: 'Go!',
           handler: data => {
             if (this.session.pts >= data.amount) {
-              var amnt = data.amount;
               this.bet(data.amount, id);
             } else {
               this.not_enough();

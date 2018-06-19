@@ -25,12 +25,25 @@
     <ion-slides pager flex>
 
       <ion-slide>
+
         <h1 text-center>Leaderboards</h1>
-        <ion-list *ngFor="let p of players; let i = index" [attr.data-index]="i">
-          <ion-item>
-            <p>{{i+1}}. {{p?.name}} - {{p?.pts}} points </p>
-          </ion-item>
-        </ion-list>
+        <h2>Players</h2>
+        <ion-scroll style="height: 150px" scrollY="true">
+          <ion-list *ngFor="let p of players; let i = index" [attr.data-index]="i">
+            <ion-item>
+              <p>{{i+1}}. {{p?.name}} - {{p?.pts}} points </p>
+            </ion-item>
+          </ion-list>
+        </ion-scroll>
+
+        <h2>Teams</h2>
+        <ion-scroll style="height: 150px" scrollY="true">
+          <ion-list *ngFor="let tm of teampts; let i = index" [attr.data-index]="i">
+            <ion-item>
+              <p>{{i+1}}. {{tm?.name}} - {{tm?.pts}} Team-points </p>
+            </ion-item>
+          </ion-list>
+        </ion-scroll>
       </ion-slide>
 
       <ion-slide>
@@ -83,7 +96,7 @@
         <ion-row>
           <p>{{e?.name}} | No. #{{e?.id}}</p>
           <br>
-          <button text-center ion-button id="eom_bet_btn" class="bet_btn" (click)="new_bet(e?.id, e?.name, e?.multiplier)">{{e?.multiplier}}x</button>
+          <button disabled text-center ion-button id="eom_bet_btn" class="bet_btn" (click)="new_bet(e?.id, e?.name, e?.multiplier)">{{e?.multiplier}}x</button>
         </ion-row>
       </ion-item>
     </ion-list>

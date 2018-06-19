@@ -46,4 +46,15 @@ public class TeamResource {
         mapper.writerWithDefaultPrettyPrinter().writeValue(sw, JSON);
         return sw.toString();
     }
+    
+    @GET
+    @Path("/get/pts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getTeamPoints() throws IOException, SQLException {
+        mapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+        teams = db.getTeamsWithPoints();
+        JSON = new TeamObj(teams);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(sw, JSON);
+        return sw.toString();
+    }
 }

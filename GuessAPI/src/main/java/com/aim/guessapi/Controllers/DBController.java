@@ -136,10 +136,19 @@ public class DBController {
         String q = "SELECT * FROM Question;";
         return fetchQuestionsFromDB(q);
     }
-    
+
     public List<UserAnswers> getAllUserAnswers() throws SQLException {
         String q = "SELECT * FROM UserAnswers";
         return fetchUserAnswersFromDB(q);
+    }
+
+    public List<Team> getTeamsWithPoints() throws SQLException {
+        String q = "SELECT t.id, t.name as teamname, SUM(u.pts) AS teampoints\n"
+                + "FROM User u, Team t \n"
+                + "WHERE u.Team_id = t.id \n"
+                + "GROUP BY t.id \n"
+                + "ORDER BY teampoints DESC;";
+        return fetchTeamPtsFromDB(q);
     }
 
     public List<User> fetchUserFromDB(String q) throws SQLException {
@@ -234,6 +243,30 @@ public class DBController {
                 String name = rs.getString("name");
 
                 Team t = new Team(id, name);
+                teams.add(t);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        conn.close();
+        return teams;
+    }
+    
+    public List<Team> fetchTeamPtsFromDB(String q) throws SQLException {
+        Connect("Fetch team points");
+        List<Team> teams = new ArrayList();
+
+        try {
+            pst = conn.prepareStatement(q);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String teamname = rs.getString("teamname");
+                int teampoints = rs.getInt("teampoints");
+
+                Team t = new Team(id, teamname, teampoints);
                 teams.add(t);
             }
         } catch (SQLException e) {
@@ -355,7 +388,7 @@ public class DBController {
         conn.close();
         return userpurchases;
     }
-    
+
     private List<Reward> fetchRewardsFromDB(String q) throws SQLException {
         Connect("Fetch rewards");
         List<Reward> rewards = new ArrayList();
@@ -372,7 +405,6 @@ public class DBController {
                 Reward r = new Reward(id, name, price);
                 rewards.add(r);
 
-                
             }
 
         } catch (SQLException e) {
@@ -396,7 +428,7 @@ public class DBController {
 
                 Question qu = new Question(id, name);
                 questions.add(qu);
-                
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -404,7 +436,7 @@ public class DBController {
         conn.close();
         return questions;
     }
-    
+
     public List<UserAnswers> fetchUserAnswersFromDB(String q) throws SQLException {
         Connect("Fetch user answers");
         List<UserAnswers> useranswers = new ArrayList();
@@ -420,7 +452,7 @@ public class DBController {
 
                 UserAnswers ua = new UserAnswers(User_id, Question_id, answer);
                 useranswers.add(ua);
-                
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -555,27 +587,25 @@ public class DBController {
         }
         return null;
     }
-    
+
     public String answerTrivia(UserAnswers ua) {
         Connect("Trivia answer");
         String q = "INSERT INTO UserAnswers VALUES (?, ?, ?)";
-        
+
         try {
             pst = conn.prepareStatement(q);
-            
+
             pst.setInt(1, ua.getUser_id());
             pst.setInt(2, ua.getQuestion_id());
             pst.setString(3, ua.getAnswer());
-            
+
             pst.executeUpdate();
             conn.close();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    
 
 }

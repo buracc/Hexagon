@@ -11,12 +11,22 @@ package com.aim.guessapi.Objects;
  */
 public class Team {
     
-    private int id;
+    private int id, pts;
     private String name;
 
     public Team(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+    
+    public Team(int id, String name, int pts) {
+        this.id = id;
+        this.name = name;
+        this.pts = pts;
+    }
+    
+    public Team() {
+        
     }
 
     public int getId() {
@@ -33,6 +43,14 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getPts() {
+        return pts;
+    }
+
+    public void setPts(int pts) {
+        this.pts = pts;
     }
     
     
