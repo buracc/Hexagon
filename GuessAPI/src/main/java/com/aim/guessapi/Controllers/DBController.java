@@ -150,6 +150,16 @@ public class DBController {
                 + "ORDER BY teampoints DESC;";
         return fetchTeamPtsFromDB(q);
     }
+    
+    public List<Team> getTeamsWithPointsByID(int id) throws SQLException {
+        String q = "SELECT t.id, t.name as teamname, SUM(u.pts) AS teampoints\n"
+                + "FROM User u, Team t \n"
+                + "WHERE u.Team_id = t.id \n"
+                + "AND t.id = " + id + "\n"
+                + "GROUP BY t.id \n"
+                + "ORDER BY teampoints DESC;";
+        return fetchTeamPtsFromDB(q);
+    }
 
     public List<User> fetchUserFromDB(String q) throws SQLException {
         Connect("Fetch user");
@@ -192,10 +202,10 @@ public class DBController {
 
                 if (name.startsWith("eom_")) {
                     if (name.endsWith("win_a")) {
-                        name = "Team A to win the entire match.";
+                        name = "T to win the entire match.";
                     }
                     if (name.endsWith("win_b")) {
-                        name = "Team B to win the entire match.";
+                        name = "CT to win the entire match.";
                     }
                     if (name.endsWith("objective")) {
                         name = "Match will have more objective wins.";
@@ -207,18 +217,19 @@ public class DBController {
 
                 if (name.startsWith("live_")) {
                     if (name.endsWith("round_a")) {
-                        name = "Team A to win this round.";
+                        name = "Round winner: T";
                     }
                     if (name.endsWith("round_b")) {
-                        name = "Team B to win this round.";
+                        name = "Round winner: CT";
                     }
                     if (name.endsWith("fb_a")) {
-                        name = "Team A to get the first kill.";
+                        name = "First kill: T";
                     }
                     if (name.endsWith("fb_b")) {
-                        name = "Team B to get the first kill.";
+                        name = "First kill: CT";
                     }
                 }
+                
                 Bet b = new Bet(id, name, multiplier);
                 bets.add(b);
             }
@@ -320,10 +331,10 @@ public class DBController {
 
                 if (name.startsWith("eom_")) {
                     if (name.endsWith("win_a")) {
-                        name = "Team A to win the entire match.";
+                        name = "T to win the entire match.";
                     }
                     if (name.endsWith("win_b")) {
-                        name = "Team B to win the entire match.";
+                        name = "CT to win the entire match.";
                     }
                     if (name.endsWith("objective")) {
                         name = "Match will have more objective wins.";
@@ -335,16 +346,16 @@ public class DBController {
 
                 if (name.startsWith("live_")) {
                     if (name.endsWith("round_a")) {
-                        name = "Team A to win this round.";
+                        name = "Round winner: T";
                     }
                     if (name.endsWith("round_b")) {
-                        name = "Team B to win this round.";
+                        name = "Round winner: CT";
                     }
                     if (name.endsWith("fb_a")) {
-                        name = "Team A to get the first kill.";
+                        name = "First kill: T";
                     }
                     if (name.endsWith("fb_b")) {
-                        name = "Team B to get the first kill.";
+                        name = "First kill: CT";
                     }
                 }
 

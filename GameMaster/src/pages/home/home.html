@@ -93,4 +93,19 @@
     <p text-center *ngFor="let p of players">{{p.name}} - Team: {{p.Team_id}}</p>
   </ion-item>
 
+    <h1 text-center>Leaderboards</h1>
+    <h2>Players</h2>
+    <ion-list *ngFor="let p of players; let i = index" [attr.data-index]="i">
+      <ion-item>
+        <p>{{i+1}}. {{p?.name}} - {{p?.pts}} points </p>
+      </ion-item>
+    </ion-list>
+
+    <h2>Teams</h2>
+    <ion-list *ngFor="let tm of teampts; let i = index" [attr.data-index]="i">
+      <ion-item>
+        <p>{{i+1}}. {{tm?.name}} - {{tm?.pts}} Team-points </p>
+      </ion-item>
+    </ion-list>
+
 </ion-content>

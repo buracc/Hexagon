@@ -26,4 +26,9 @@ export class TeamService {
         .map(res => res.json());
     }
 
+    getpointsperteam(id) {
+        return this.http.get(this.url + "pts/" + id)
+        .map(res => res.json());
+    }
+
 }

@@ -61,6 +61,9 @@ export class HomePage {
   questions: question[];
   onlineusers: any[];
 
+  teampts: any[];
+  rank: any[];
+
   constructor(public navCtrl: NavController, public toastservice: ToastService,
     public socket: Socket, public dbservice: DbService, public alertctrl: AlertController,
     public http: Http, public api: ApiService, public loaderctrl: LoadingController) {
@@ -288,6 +291,10 @@ export class HomePage {
 
     this.dbservice.getallquestions().subscribe(response => {
       this.questions = response.question;
+    })
+
+    this.dbservice.getteamswithpoints().subscribe(response => {
+      this.teampts = response.team;
     })
   }
 }

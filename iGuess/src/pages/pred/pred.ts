@@ -71,6 +71,7 @@ export class PredPage {
   disabled: boolean = true;
   trivia_q: any;
   teampts: any[];
+  teampts_player: number;
 
   won_log: any[];
   lost_log: any[];
@@ -311,10 +312,15 @@ export class PredPage {
       this.teampts = response.team;
     })
 
+    
     this.userservice.getUser().then(user => {
       this.userservice.getbyname(user.name).subscribe(response => {
         this.userservice.storeUser(response.user[0]);
         this.session = response.user[0];
+        this.teamservice.getpointsperteam(response.user[0].Team_id).subscribe(response => {
+          this.teampts_player = response.team[0].pts;
+        })
+
         this.predservice.get_per_user(this.session.id).subscribe(response => {
           this.refresh_profile(this.session.id);
           for (let i in response.pred) {
@@ -480,7 +486,7 @@ export class PredPage {
     this.updatePage();
   }
 
-  buy(r, session) {
+  buy(r, session, teampts) {
 
     let alert = this.alertctrl.create({
       title: name,
@@ -496,7 +502,7 @@ export class PredPage {
         {
           text: 'Yes!',
           handler: data => {
-            if (session.pts >= r.price) {
+            if (teampts >= r.price) {
               let loader = this.loaderctrl.create({
                 content: "Buying item..",
               });

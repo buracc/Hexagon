@@ -58,4 +58,9 @@ export class DbService {
             .map(res => res.json());
     }
 
+    getteamswithpoints() {
+        return this.http.get(this.url + "team/get/pts")
+        .map(res => res.json());
+    }
+
 }

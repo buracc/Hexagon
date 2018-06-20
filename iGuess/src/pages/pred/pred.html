@@ -16,7 +16,7 @@
     <ion-card-content>
       Name: {{this.session?.name}}
       <br>Points: {{this.session?.pts}}
-      <br>Team: {{this.session?.team_name}}
+      <br>Team: {{this.session?.team_name}} | teampoints: {{this.teampts_player}}
     </ion-card-content>
   </ion-card>
 
@@ -28,7 +28,7 @@
 
         <h1 text-center>Leaderboards</h1>
         <h2>Players</h2>
-        <ion-scroll style="height: 150px" scrollY="true">
+        <ion-scroll style="height: 100px" scrollY="true">
           <ion-list *ngFor="let p of players; let i = index" [attr.data-index]="i">
             <ion-item>
               <p>{{i+1}}. {{p?.name}} - {{p?.pts}} points </p>
@@ -37,7 +37,7 @@
         </ion-scroll>
 
         <h2>Teams</h2>
-        <ion-scroll style="height: 150px" scrollY="true">
+        <ion-scroll style="height: 100px" scrollY="true">
           <ion-list *ngFor="let tm of teampts; let i = index" [attr.data-index]="i">
             <ion-item>
               <p>{{i+1}}. {{tm?.name}} - {{tm?.pts}} Team-points </p>
@@ -167,8 +167,8 @@
         <ion-row>
           <p>Reward: {{r?.name}}
             <br>Price: {{r?.price}}</p>
-          <button ion-button class="buy_btn" (click)="buy(r, this?.session)">Buy</button>
-        </ion-row>
+          <button ion-button class="buy_btn" (click)="buy(r, this?.session, this?.teampts_player)">Buy</button>
+        </ion-row> 
       </ion-item>
     </ion-list>
   </ion-card>
