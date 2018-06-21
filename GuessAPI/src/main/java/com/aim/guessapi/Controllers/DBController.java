@@ -32,9 +32,9 @@ public class DBController {
     private PreparedStatement pst;
     private ResultSet rs;
 
-    private final String IP = "79.143.178.40";
-    private final String USER = "chin";
-    private final String PASS = "112123";
+    private final String IP = "";
+    private final String USER = "";
+    private final String PASS = "";
 
     public void Connect(String s) {
         try {
