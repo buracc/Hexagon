@@ -16,7 +16,7 @@ var log_bets = [];
 
 io.on('connection', (socket) => {
 
-    console.log("Client connected: " + socket.handshake.address + ".");
+    console.log("Client connected: " + socket.id + ".");
 
     socket.on('connected', data => {
         connected.push(data.user);
@@ -40,6 +40,10 @@ io.on('connection', (socket) => {
     socket.on('log_bets', data => {
         log_bets.push(data);
         io.emit('log_bets', log_bets)
+    });
+
+    socket.on('admin', data => {
+        io.emit('admin', data);
     })
 });
 
