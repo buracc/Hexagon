@@ -4,7 +4,7 @@ This repository consists of four directories, all being part of the Hexagon proj
 
 PS: The reason the projects 'iGuess' and 'GuessAPI' are called like that, is because we couldn't come up with a name and we just went with 'iGuess', and I couldn't be bothered to change the names (yet).
 
-#### Functional details
+#### Functional details summary
 The Hexagon app is an Ionic web application, which is connected to a MySQL database. The connection with the database (retrieving, and manipulating data) is handled with a RESTful API. The web app consists of two parts: the player's app, and the game master's app (basically the admin panel). On the player's app, players can obviously play the game, and on the admin panel, game masters can take control of games and manipulate data which is saved onto the database. The game communicates through sockets. There exists a socket.IO server, which handles all requests sent through sockets. An example would be, the game master sends a request through a socket which executes a function on all client's web page.
 
 ### 1. iGuess (Hexagon web project)
@@ -43,3 +43,7 @@ The PredServer contains the Socket.IO server. This server handles all the reques
 ### 4. GuessAPI (Hexagon web API)
 
 This is the directory for the RESTful web API, it's written in Java. This is the back-end of the application, which handles all the data that's being saved and manipulated on the web application. The API is connected to a MySQL database, which is used to save data from the web application.
+
+
+### Documentation
+Each project has their own documentation. Check the readme.md file of each project for the associated documentation.
