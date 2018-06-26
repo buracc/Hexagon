@@ -47,4 +47,4 @@ This is the directory for the RESTful web API, it's written in Java. This is the
 
 ### Documentation
 Each project has it's own documentation. Check the readme.md file of each project for the associated documentation.
-***(But please bare with me, as the documentation is not fully completed yet!!)***
+***(But please bare with me, as the documentation *might* be incomplete!)***
